@@ -1,0 +1,27 @@
+body {
+    padding: 10px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif,'Franklin Gothic', 'Arial Narrow', Arial;
+}
+#Auction_head{
+    font-family: 'Gill Sans MT','Calibri', 'Trebuchet MS', sans-serif;
+    font-weight: bolder;
+    font-size: 40px;
+}
+.card-title{
+    font-family: 'Gill Sans MT',Calibri, 'Trebuchet MS', sans-serif;
+    font-weight: bold;
+}
+.col-md-4{
+    padding: 5px;
+}
+.text-body-secondary{
+    opacity: 0.5;
+}
+.sub-heading{
+    font-family: 'Century Gothic',Helvetica, sans-serif;
+    font-weight: bold;
+}
+.list-group-item{
+    padding: 4px;
+    padding-left: 10px;
+}

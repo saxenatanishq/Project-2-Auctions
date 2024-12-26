@@ -1,0 +1,38 @@
+{%extends 'auctions/layout.html' %}
+
+{%block title%}
+New Listing
+{%endblock%}
+
+{%block body%}
+    <h2 class="sub-heading">Create New Listing</h2>
+    <form action="{% url 'add' %}" method="post" style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;">
+        {%csrf_token%}
+        <div class="input-group mb-3" style="width: 30%; margin-left: 2%;">
+            <span class="input-group-text" id="inputGroup-sizing-default">Title</span>
+            <input type="text" name="title" maxlength="30" required id="id_title" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+        </div>
+        <div class="mb-3" style="margin-left: 2%;margin-right: 2%;">
+            <label for="exampleFormControlTextarea1" class="form-label">Description</label>
+            <textarea type="text" name="description" maxlength="200" required id="id_description" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+        </div>
+        <div style="margin-left: 2%;">
+            <label for="id_category">Category : </label>
+            <select class="form-select" name="category" required id="id_category" aria-label="Default select example"   >
+                {%for category in categories%}
+                <option value="{{category}}">{{category}}</option>
+                {%endfor%}
+            </select>
+            <input type="hidden" name="createdby" id="id_createdby" value="{{request.user.id}}">
+        </div>
+        <div class="input-group mb-3" style="width: 30%; margin-left: 2%;">
+            <span class="input-group-text" id="inputGroup-sizing-default">Starting Price</span>
+            <input type="number" name="starting_price" required id="id_starting_price" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+        </div>
+        <div class="input-group mb-3" style="width: 30%; margin-left: 2%;">
+            <span class="input-group-text" id="inputGroup-sizing-default">Image URL</span>
+            <input type="url" name="image_url" maxlength="200" required id="id_image_url" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+        </div>
+        <button type="submit" class="btn btn-outline-primary" style="margin-left: 2%;">Submit</button>
+    </form>
+{%endblock%}

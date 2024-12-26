@@ -1,0 +1,49 @@
+{% extends "auctions/layout.html" %}
+{%block title%}
+Watchlist
+{%endblock%}
+{%block body%}
+   <h2 class="sub-heading">Your Watchlist</h2> 
+   {% for listing in listings %}
+   <a href="{% url 'view' listing.id %}" class="text-decoration-none" style="color: black;">
+    {%if listing.winner == request.user %}
+    <strong>YOU WON THE BID!</strong>
+    <div class="card mb-3" style="border: green 2px solid;">
+        <div class="row g-0">
+            <div class="col-md-4" style="text-align: center;">
+                <img src="{{listing.image_url}}" class="img-fluid rounded-start" alt="Picture of a {{listing.title}}" style="max-width: 300px; max-height: 200px;">
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title">{{listing.title}}</h5>
+                    <p class="card-text">
+                        {{listing.description}}
+                    </p>
+                    <p class="card-text"><small class="text-body-secondary">Created {{listing.created_at}}</small></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {%else%}
+    <div class="card mb-3">
+        <div class="row g-0">
+            <div class="col-md-4" style="text-align: center;">
+                <img src="{{listing.image_url}}" class="img-fluid rounded-start" alt="Picture of a {{listing.title}}" style="max-width: 300px; max-height: 200px;">
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title">{{listing.title}}</h5>
+                    <p class="card-text">
+                        {{listing.description}}
+                    </p>
+                    <p class="card-text"><small class="text-body-secondary">Created {{listing.created_at}}</small></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {%endif%}
+   </a>
+   {%empty%}
+   <h4 style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;">Nothing in your Watchlist yet!</h4>
+   {%endfor%}
+{%endblock%}

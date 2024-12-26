@@ -1,0 +1,135 @@
+{%extends 'auctions/layout.html' %}
+{%block title%}
+{{listing.title}}
+{%endblock%}
+
+{%block body%}
+   <div>
+    <span class="sub-heading" style="font-size: 30px;">{{listing.title}}</span>
+    <span style="float: right; display: flex; gap: 10px;">
+        <span>
+            {% if not listing.is_closed %}
+            {% if listing.createdby == request.user %}
+            <form action="{% url 'close_auction' listing.id %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-danger">Close Auction</button>
+            </form>
+            {% endif %}
+            {% endif %}
+        </span>
+        <span>
+            {% if not request.user in listofusers %}
+            <form method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-primary">Add to Watchlist</button>
+            </form>
+            {% else %}
+            <form method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-primary">Remove from Watchlist</button>
+            </form>
+            {% endif %}
+        </span>
+    </span>    
+   </div>
+   
+   <div style="display: flex; align-items: flex-start; font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;">
+    <div style="width: 50%; margin-right: 20px;">
+        <div style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; font-weight: 100;">
+            Description:
+        </div>
+        <div style="border: black 1px solid; border-radius: 10px; padding: 20px;margin-bottom: 10px;">
+            {{listing.description}}
+        </div>
+        <strong>Category</strong> : <button type="button" class="btn btn-outline-secondary" disabled style="padding-left: 5px;padding-right: 5px;padding-top: 0%;padding-bottom: 0%;">{{listing.category}}</button>
+        <br>
+        <strong>Base Price</strong> : {{listing.starting_price}}$
+        <div style="opacity: 70%;margin-bottom: 20px;">
+            Created at {{listing.created_at}}
+            <br>
+            Created by <strong>{{listing.createdby.username}}</strong>
+        </div>
+        <div style="font-size: large;">
+            {% if listing.is_closed %}
+            {%if listing.winner == request.user%}
+            <h4>You won the bid at {{current_bid}}$</h4>
+            {%else%}
+            <h4>Bid won by {{listing.winner.username}} at {{current_bid}}$</h4>
+            {%endif%}
+            {%else%}
+            <h4>Current Bid : {{current_bid}}$</h4>
+            {%endif%}
+
+            {% if listing.is_closed %}
+            <h4>The Bidding has closed</h4>
+            {%else%}
+            <form method="post">
+                {% csrf_token %}
+                {%if bid_error%}
+                <h5 style="color: red;">{{bid_error}}</h5>
+                {%endif%}
+                <label for="id_price">Place Bid:</label>
+                <input type="number" name="price" required id="id_price">
+                <input value="{{request.user.id}}" type="hidden" name="user_bid" required id="id_user_bid">
+                <input value="{{listing.id}}" type="hidden" name="listing_bid" required id="id_listing_bid">
+                <button type="submit" class="btn btn-outline-primary" style="padding-top: 4px; padding-bottom: 4px;">Submit</button>
+            </form>
+            {%endif%}
+        </div>
+        <div style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; font-weight: 100;">
+            Bids till now:
+        </div>
+        <div style="border: black 1px solid; border-radius: 10px; padding: 5px;margin-bottom: 10px;">
+            <ol>
+                {%for bid in bids%}
+                <li><strong>{{bid.user_bid}}</strong> : {{bid.price}}$</li>
+                {%empty%}
+                No bid till now
+                {%endfor%}
+            </ol>            
+        </div>
+    </div>
+    
+    <div style="margin: auto;">
+        <img src="{{listing.image_url}}" alt="Picture of a {{listing.title}}" class="rounded" 
+             style="max-width: 600px; max-height: 400px; margin: 5px;">
+    </div>
+   </div>
+   
+   <hr>
+
+   <div style="display: flex; align-items: flex-start; font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;">
+    <div style="margin-right: 20px;">
+        <div style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; font-weight: 100;">
+            Comments:
+        </div>
+        <ul>
+            {%for comment in comments%}
+            <li>
+                <div>
+                    <strong>{{comment.user_comment}}</strong> : {{comment.content}}
+                </div>
+            </li>
+            {%empty%}
+            No comments till now!
+            {%endfor%}
+        </ul>
+        <div style="font-size: medium;">
+            <form method="post">
+                {% csrf_token %}
+                <label for="id_content">Add comment:</label>
+                <input type="text" name="content" maxlength="200" required id="id_content">
+                <input value="{{request.user.id}}" type="hidden" name="user_comment" required id="id_user_comment">
+                <input value="{{listing.id}}" type="hidden" name="listing_comment" required id="id_listing_comment">
+                <button type="submit" class="btn btn-outline-primary" style="padding-top: 4px; padding-bottom: 4px;">Submit</button>
+            </form>            
+        </div>
+    </div>
+  </div>
+
+
+
+
+
+   
+{%endblock%}
